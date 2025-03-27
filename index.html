@@ -1,0 +1,1535 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Go6 - Advanced Raid Tool</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        :root {
+            --purple-1: #1A0B2E;
+            --purple-2: #371B58;
+            --purple-3: #4C1C7B;
+            --purple-4: #7D3CFF;
+            --accent: #FF6BFF;
+            --glass: rgba(255, 255, 255, 0.05);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', system-ui, sans-serif;
+        }
+
+        body {
+            background: linear-gradient(135deg, var(--purple-1), var(--purple-2));
+            color: white;
+            min-height: 100vh;
+        }
+
+        .nav-container {
+            background: var(--glass);
+            backdrop-filter: blur(10px);
+            padding: 1rem 5vw;
+            position: fixed;
+            width: 100%;
+            top: 0;
+            z-index: 1000;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .nav-content {
+            max-width: 1600px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .nav-logo {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .nav-logo img {
+            width: clamp(30px, 3vw, 40px);
+            height: clamp(30px, 3vw, 40px);
+            filter: drop-shadow(0 0 10px var(--accent));
+        }
+
+        .nav-title {
+            font-size: clamp(1.2rem, 2vw, 1.5rem);
+            font-weight: 700;
+            background: linear-gradient(45deg, #fff, var(--accent));
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: clamp(1rem, 3vw, 2rem);
+        }
+
+        .nav-link {
+            color: white;
+            text-decoration: none;
+            padding: 0.5rem 1rem;
+            border-radius: 8px;
+            transition: all 0.3s ease;
+            position: relative;
+            font-size: clamp(0.9rem, 1.2vw, 1rem);
+        }
+
+        .nav-link::before {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background: var(--accent);
+            transition: width 0.3s ease;
+        }
+
+        .nav-link:hover::before {
+            width: 100%;
+        }
+
+        .hero-section {
+            padding: 20vh 5vw 10vh;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            gap: 3vw;
+            margin: 0 auto;
+        }
+
+        .hero-content {
+            flex: 1 1 50%;
+            animation: slideInLeft 1s ease;
+        }
+
+        .hero-title {
+            font-size: clamp(2.5rem, 6vw, 4rem);
+            margin-bottom: 2rem;
+            background: linear-gradient(45deg, #fff, var(--accent));
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            line-height: 1.2;
+            max-width: 800px;
+        }
+
+        .hero-description {
+            font-size: clamp(1rem, 1.5vw, 1.2rem);
+            color: rgba(255, 255, 255, 0.9);
+            margin-bottom: 3rem;
+            max-width: 600px;
+            line-height: 1.6;
+        }
+
+        .cta-button {
+            background: linear-gradient(45deg, var(--purple-4), var(--accent));
+            padding: clamp(1rem, 1.5vw, 1.5rem) clamp(2rem, 3vw, 3rem);
+            border-radius: 8px;
+            color: white;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.8rem;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+            font-size: clamp(1rem, 1.2vw, 1.2rem);
+        }
+
+        .cta-button::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(120deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+            transition: 0.5s;
+        }
+
+        .cta-button:hover::before {
+            left: 100%;
+        }
+
+        .cta-button:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 5px 25px rgba(125, 60, 255, 0.4);
+        }
+
+        .hero-illustration {
+            flex: 1 1 50%;
+            position: relative;
+            animation: float 3s ease-in-out infinite;
+        }
+
+        .tool-preview {
+            width: 100%;
+            max-width: 800px;
+            border-radius: 16px;
+            transform: perspective(1500px) rotateY(-12deg) rotateZ(-2deg) rotateX(4deg);
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            background: var(--glass);
+            backdrop-filter: blur(5px);
+            box-shadow: 15px 20px 40px rgba(0, 0, 0, 0.3);
+        }
+
+        .tool-preview:hover {
+            transform: perspective(1500px) rotateY(-2deg) rotateZ(0.5deg) rotateX(1deg);
+            box-shadow: 8px 12px 30px rgba(0, 0, 0, 0.2);
+        }
+
+        @keyframes slideInLeft {
+            from {
+                opacity: 0;
+                transform: translateX(-50px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-20px); }
+        }
+
+
+        @media (max-width: 768px) {
+            .hero-section {
+                flex-direction: column;
+                text-align: center;
+                padding: 15vh 5vw 5vh;
+                gap: 4rem;
+            }
+
+            .nav-links {
+                display: none;
+            }
+
+            .hero-title,
+            .hero-description {
+                max-width: 100%;
+                margin-left: auto;
+                margin-right: auto;
+            }
+
+            .tool-preview {
+                transform: perspective(1000px) rotateY(0deg) rotateZ(0deg) rotateX(0deg);
+                max-width: 100%;
+            }
+
+            .cta-button {
+                width: 100%;
+                justify-content: center;
+            }
+        }
+
+        @media (min-width: 769px) and (max-width: 1024px) {
+            .hero-section {
+                gap: 3rem;
+                padding: 15vh 5vw;
+            }
+
+            .hero-title {
+                font-size: clamp(2rem, 4vw, 3rem);
+            }
+
+            .tool-preview {
+                max-width: 90%;
+            }
+        }
+
+
+
+
+.discord-btn {
+    background: linear-gradient(45deg, #5865F2, var(--purple-4));
+    color: white;
+    padding: 0.8rem 1.5rem;
+    border-radius: 8px;
+    text-decoration: none;
+    display: flex;
+    align-items: center;
+    gap: 0.8rem;
+    transition: all 0.3s ease;
+    position: relative;
+    overflow: hidden;
+    font-size: clamp(0.9rem, 1.1vw, 1.1rem);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.discord-btn::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(120deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+    transition: 0.5s;
+}
+
+.discord-btn:hover::before {
+    left: 100%;
+}
+
+.discord-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 5px 25px rgba(88, 101, 242, 0.4);
+}
+
+.nav-link {
+    color: rgba(255, 255, 255, 0.8);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    font-weight: 600;
+    font-family: 'Segoe UI', system-ui, sans-serif;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.nav-link:hover {
+    color: var(--accent);
+    transform: translateY(-1px);
+}
+
+.nav-link.active {
+    color: var(--accent);
+    background: linear-gradient(45deg, var(--purple-4), rgba(255, 107, 255, 0.1));
+    box-shadow: 0 4px 15px rgba(125, 60, 255, 0.2);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.nav-link::after {
+    content: '';
+    position: absolute;
+    bottom: -5px;
+    left: 50%;
+    width: 0;
+    height: 2px;
+    background: var(--accent);
+    transition: all 0.3s ease;
+}
+
+.nav-link.active::after {
+    width: 100%;
+    left: 0;
+}
+
+.nav-title {
+    letter-spacing: -0.03em;
+    text-shadow: 0 0 15px var(--accent);
+}
+
+.nav-links {
+    font-family: 'Segoe UI', system-ui, sans-serif;
+}
+@media (max-width: 768px) {
+    .discord-btn span {
+        display: none;
+    }
+    
+    .discord-btn {
+        padding: 0.8rem;
+    }
+    
+    .nav-content {
+        gap: 1rem;
+    }
+
+
+
+
+    html {
+    scroll-behavior: smooth;
+}
+
+@media (prefers-reduced-motion: reduce) {
+    html {
+        scroll-behavior: auto;
+    }
+}
+}
+
+
+    </style>
+</head>
+<body>
+
+<nav class="nav-container">
+    <div class="nav-content">
+        <div class="nav-logo">
+            <img src="./files/imgs/icon.ico" alt="Go6 Logo">
+            <span class="nav-title">GO6</span>
+        </div>
+        
+        <div class="nav-links">
+            <a href="#home" class="nav-link">Home</a>
+            <a href="#features" class="nav-link">Features</a>
+            <a href="#download" class="nav-link">Download</a>
+            <a href="#faq" class="nav-link">Faq</a>
+            <a href="#support" class="nav-link">Support</a>
+        </div>
+
+
+        <a href="https://discord.gg/go6" target="_blank" rel="noopener noreferrer" class="discord-btn">
+            <i class="fab fa-discord"></i>
+            <span>Discord</span>
+        </a>
+    </div>
+</nav>
+
+<script>
+
+    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+        anchor.addEventListener('click', function (e) {
+            e.preventDefault();
+            const target = document.querySelector(this.getAttribute('href'));
+            if (target) {
+                target.scrollIntoView({
+                    behavior: 'smooth',
+                    block: 'start'
+                });
+            }
+        });
+    });
+    
+
+    const sections = document.querySelectorAll('section');
+    const navLinks = document.querySelectorAll('.nav-link');
+    
+    function highlightNav() {
+        let scrollPosition = window.pageYOffset + 200;
+        
+        sections.forEach(section => {
+            const sectionTop = section.offsetTop;
+            const sectionHeight = section.clientHeight;
+            
+            if (scrollPosition >= sectionTop && scrollPosition < sectionTop + sectionHeight) {
+                const id = section.getAttribute('id');
+                navLinks.forEach(link => {
+                    link.classList.remove('active');
+                    if (link.getAttribute('href').includes(id)) {
+                        link.classList.add('active');
+                    }
+                });
+            }
+        });
+    }
+    
+    window.addEventListener('scroll', highlightNav);
+    window.addEventListener('load', highlightNav);
+    
+    function handleResize() {
+        const heroSection = document.querySelector('.hero-section');
+        if (window.innerWidth <= 768) {
+            heroSection.style.minHeight = 'auto';
+        } else {
+            heroSection.style.minHeight = '100vh';
+        }
+    }
+    
+    window.addEventListener('resize', handleResize);
+    handleResize();
+    </script>
+
+
+
+
+    <style>
+        .feature-list {
+            margin-bottom: 2rem;
+        }
+        
+        .features {
+            list-style: none;
+            padding-left: 0;
+            margin: 1.5rem 0;
+        }
+        
+        .features li {
+            position: relative;
+            padding-left: 1.5rem;
+            margin-bottom: 1rem;
+            font-size: 1.1rem;
+            color: rgba(255, 255, 255, 0.9);
+        }
+        
+        .features li::before {
+            content: "-";
+            position: absolute;
+            left: 0;
+            color: var(--accent);
+            font-weight: bold;
+        }
+        
+        @media (max-width: 768px) {
+            .features li {
+                font-size: 1rem;
+                margin-bottom: 0.8rem;
+            }
+        }
+    </style>
+    
+<section id="home" class="hero-section">
+    <div class="hero-content">
+        <h1 class="hero-title">#1 Discord Raider</h1>
+        <div class="feature-list">
+            <ul class="features">
+                <li>Be able to execute raids with a completely FREE tool</li>
+                <li>Select between the UI or the console version!</li>
+                <li>Easy Token/Proxy management</li>
+                <li>Smart UI</li>
+            </ul>
+        </div>
+        <a href="#download" class="cta-button">
+            <i class="fas fa-download"></i>
+            Get Started
+        </a>
+    </div>
+    <div class="hero-illustration">
+        <img src="./files/imgs/tool.png" alt="Go6 Interface" class="tool-preview">
+    </div>
+</section>
+
+
+
+
+
+
+
+
+
+
+    <style>
+
+.features-section {
+    padding: 4rem 5vw;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    background: linear-gradient(45deg, var(--purple-1), var(--purple-3));
+    position: relative;
+    overflow: hidden;
+}
+
+.section-header {
+    text-align: center;
+    margin-bottom: 4rem;
+}
+
+.section-title {
+    font-size: clamp(2.5rem, 5vw, 3.5rem);
+    background: linear-gradient(45deg, #fff, var(--accent));
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+    margin-bottom: 1rem;
+}
+
+.section-subtitle {
+    font-size: 1.2rem;
+    color: rgba(255, 255, 255, 0.8);
+    max-width: 600px;
+    margin: 0 auto;
+}
+
+.features-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 2rem;
+    max-width: 1400px;
+    margin: 0 auto;
+}
+
+.feature-card {
+    background: var(--glass);
+    backdrop-filter: blur(10px);
+    border-radius: 16px;
+    padding: 2rem;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    position: relative;
+    overflow: hidden;
+}
+
+.feature-card::before {
+    content: '';
+    position: absolute;
+    top: -50%;
+    left: -50%;
+    width: 200%;
+    height: 200%;
+    background: linear-gradient(45deg, transparent, var(--accent), transparent);
+    transform: rotate(45deg);
+    transition: 0.6s;
+    opacity: 0;
+}
+
+.feature-card:hover::before {
+    opacity: 0.1;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+}
+
+.feature-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+}
+
+.feature-icon {
+    width: 60px;
+    height: 60px;
+    border-radius: 12px;
+    background: linear-gradient(45deg, var(--purple-4), var(--accent));
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 1.5rem;
+    font-size: 1.5rem;
+}
+
+.feature-title {
+    font-size: 1.4rem;
+    margin-bottom: 1rem;
+    background: linear-gradient(45deg, #fff, var(--accent));
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+}
+
+.feature-description {
+    color: rgba(255, 255, 255, 0.8);
+    line-height: 1.6;
+}
+
+@media (max-width: 768px) {
+    .features-section {
+        padding: 4rem 5vw;
+    }
+    
+    .feature-card {
+        padding: 1.5rem;
+    }
+    
+    .feature-icon {
+        width: 50px;
+        height: 50px;
+        font-size: 1.2rem;
+    }
+}
+    </style>
+
+<!-- Features Section -->
+<section id="features" class="features-section">
+    <div class="section-header">
+        <h2 class="section-title">Powerful Features</h2>
+        <p class="section-subtitle">Everything you need for raiding</p>
+    </div>
+
+    <div class="features-grid">
+        <!-- Feature Card 1 -->
+        <div class="feature-card">
+            <div class="feature-icon">
+                <i class="fas fa-bolt"></i>
+            </div>
+            <h3 class="feature-title">Lightning Fast Raiding</h3>
+            <p class="feature-description">
+                Super Fast raiding
+            </p>
+        </div>
+
+        <!-- Feature Card 2 -->
+        <div class="feature-card">
+            <div class="feature-icon">
+                <i class="fas fa-shield-alt"></i>
+            </div>
+            <h3 class="feature-title">Verification Bypasses</h3>
+            <p class="feature-description">
+                We offer multiple verification bypasses!
+            </p>
+        </div>
+
+        <!-- Feature Card 3 -->
+        <div class="feature-card">
+            <div class="feature-icon">
+                <i class="fas fa-code"></i>
+            </div>
+            <h3 class="feature-title">Open Source</h3>
+            <p class="feature-description">
+                The UI version of our raider is Open Source!
+            </p>
+        </div>
+
+        <!-- Feature Card 4 -->
+        <div class="feature-card">
+            <div class="feature-icon">
+                <i class="fas fa-brain"></i>
+            </div>
+            <h3 class="feature-title">Smart UI</h3>
+            <p class="feature-description">
+                Its very easy to use the UI. Good for beginners
+            </p>
+        </div>
+
+        <!-- Feature Card 5 -->
+        <div class="feature-card">
+            <div class="feature-icon">
+                    <i class="fas fa-money-bill-wave"></i>
+            </div>
+            <h3 class="feature-title">Completely Free</h3>
+            <p class="feature-description">
+                    No hidden costs, no subscriptions. 100% free to use!
+            </p>
+        </div>
+
+        <!-- Feature Card 6 -->
+        <div class="feature-card">
+            <div class="feature-icon">
+                    <i class="fas fa-shield-alt"></i>
+            </div>
+            <h3 class="feature-title">Privacy First</h3>
+            <p class="feature-description">
+                    We don’t collect or store any of your data. Your privacy is our priority!
+            </p>
+    </div>
+
+        <!-- Feature Card 7 -->
+        <div class="feature-card">
+            <div class="feature-icon">
+                    <i class="fas fa-sync-alt"></i>
+            </div>
+            <h3 class="feature-title">Always Up to Date</h3>
+            <p class="feature-description">
+                    We provide regular updates and fixes whenever something breaks!
+            </p>
+    </div>
+
+        <!-- Feature Card 8 -->
+        <div class="feature-card">
+            <div class="feature-icon">
+                    <i class="fas fa-desktop"></i>
+            </div>
+            <h3 class="feature-title">Console or UI</h3>
+            <p class="feature-description">
+                    Choose the experience that suits you best! Use our raider with a clean UI or go with the console.
+            </p>
+    </div>
+
+        <!-- Feature Card 10 -->
+        <div class="feature-card">
+            <div class="feature-icon">
+                    <i class="fas fa-headset"></i>
+            </div>
+            <h3 class="feature-title">24/7 Support</h3>
+            <p class="feature-description">
+                    Need help? Our team is always available on Discord!  
+                    <a href="https://discord.gg/go6" target="_blank" style="color: #5865F2; font-weight: bold; text-decoration: none;">
+                            Join us at discord.gg/go6
+                    </a>.
+            </p>
+    </div>
+
+
+    </div>
+</section>
+
+
+
+<!-- Download Section -->
+<section id="download" class="download-section">
+    <div class="section-header">
+        <h2 class="section-title">Choose Your Version</h2>
+        <p class="section-subtitle">Select the interface that matches your preference</p>
+    </div>
+
+    <div class="download-grid">
+        <!-- UI Version -->
+        <div class="download-card">
+            <div class="version-image">
+                <img src="./files/imgs/ui.png" alt="UI Version">
+            </div>
+            <div class="version-content">
+                <div class="version-header">
+                    <i class="fas fa-desktop"></i>
+                    <h3 class="version-title">Graphical Interface [Beta]</h3>
+                </div>
+                <div class="version-specs">
+                    <p><i class="fas fa-check"></i> Intuitive visual controls</p>
+                    <p><i class="fas fa-check"></i> Real-time stats</p>
+                    <p><i class="fas fa-check"></i> Open Source</p>
+                    <p><i class="fas fa-check"></i> Easy To Use</p>
+                </div>
+                <a href="https://fedxg.pythonanywhere.com/download_ui" class="download-btn" target="_blank">
+                    <i class="fas fa-download"></i>
+                    Download UI Version
+                </a>
+            </div>
+        </div>
+
+        <!-- Console Version -->
+        <div class="download-card">
+            <div class="version-image">
+                <img src="./files/imgs/console.png" alt="Console Version">
+            </div>
+            <div class="version-content">
+                <div class="version-header">
+                    <i class="fas fa-terminal"></i>
+                    <h3 class="version-title">Console Edition</h3>
+                </div>
+                <div class="version-specs">
+                    <p><i class="fas fa-check"></i> Many Functions</p>
+                    <p><i class="fas fa-check"></i> Fast</p>
+                    <p><i class="fas fa-check"></i> Includes An Booster!</p>
+                </div>
+                <a href="https://fedxg.pythonanywhere.com/download_console" class="download-btn" target="_blank">
+                    <i class="fas fa-download"></i>
+                    Download Console Version
+                </a>
+            </div>
+        </div>
+    </div>
+</section>
+
+<style>
+.download-section {
+    padding: 4rem 5vw;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    background: linear-gradient(45deg, var(--purple-2), var(--purple-1));
+    position: relative;
+    overflow: hidden;
+}
+
+.download-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 3rem;
+    max-width: 1400px;
+    margin: 2rem auto 0;
+}
+
+.download-card {
+    background: var(--glass);
+    backdrop-filter: blur(10px);
+    border-radius: 20px;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.download-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 15px 40px rgba(0, 0, 0, 0.3);
+}
+
+.version-image img {
+    width: 100%;
+    height: 250px;
+    object-fit: cover;
+    border-bottom: 2px solid var(--accent);
+}
+
+.version-content {
+    padding: 2rem;
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+}
+
+.version-header {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    margin-bottom: 1.5rem;
+}
+
+.version-header i {
+    font-size: 2rem;
+    color: var(--accent);
+    background: linear-gradient(45deg, var(--purple-4), var(--accent));
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+}
+
+.version-title {
+    font-size: 1.5rem;
+    background: linear-gradient(45deg, #fff, var(--accent));
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+}
+
+.version-specs {
+    margin-bottom: 2rem;
+    flex: 1;
+}
+
+.version-specs p {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    margin-bottom: 0.8rem;
+    color: rgba(255, 255, 255, 0.9);
+}
+
+.version-specs i {
+    color: var(--accent);
+    width: 20px;
+}
+
+.download-btn {
+    background: linear-gradient(45deg, var(--purple-4), var(--accent));
+    color: white;
+    padding: 1rem 2rem;
+    border-radius: 10px;
+    text-align: center;
+    text-decoration: none;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.8rem;
+    transition: all 0.3s ease;
+    margin-top: auto;
+}
+
+.download-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 5px 20px rgba(125, 60, 255, 0.4);
+}
+
+@media (max-width: 768px) {
+    .download-card {
+        flex-direction: column;
+    }
+    
+    .version-image img {
+        height: 200px;
+    }
+    
+    .version-content {
+        padding: 1.5rem;
+    }
+    
+    .download-btn {
+        padding: 0.8rem 1.5rem;
+    }
+}
+
+@media (min-width: 1024px) {
+    .download-grid {
+        grid-template-columns: repeat(2, 1fr));
+    }
+    
+    .download-card {
+        flex-direction: row;
+    }
+    
+    .version-image {
+        flex: 1;
+    }
+    
+    .version-image img {
+        height: 100%;
+        border-bottom: none;
+        border-right: 2px solid var(--accent);
+    }
+    
+    .version-content {
+        flex: 1;
+    }
+}
+
+
+.proxy-note {
+    background: rgba(255, 107, 255, 0.1);
+    padding: 1rem;
+    border-radius: 8px;
+    margin-top: 1rem;
+    border-left: 3px solid var(--accent);
+}
+
+.proxy-note i {
+    color: var(--accent);
+    margin-right: 0.5rem;
+}
+
+code {
+    font-family: monospace;
+    background: rgba(0,0,0,0.3);
+    padding: 0.2rem 0.4rem;
+    border-radius: 4px;
+    display: inline-block;
+    margin: 0.2rem 0;
+}
+
+
+.community-note {
+    background: rgba(107, 255, 150, 0.1);
+    padding: 1rem;
+    border-radius: 8px;
+    margin-top: 1.5rem;
+    border-left: 3px solid #6bff96;
+    display: flex;
+    align-items: center;
+}
+
+.community-note i {
+    color: #6bff96;
+    margin-right: 0.8rem;
+    font-size: 1.2rem;
+}
+
+
+
+.disclaimer-note i {
+    color: #ff6b6b;
+    margin-right: 0.8rem;
+    font-size: 1.2rem;
+}
+
+
+
+.disclaimer-note {
+    background: rgba(255, 255, 255, 0.05);
+    padding: 1rem;
+    border-radius: 8px;
+    margin: 1rem 0;
+    border-left: 3px solid var(--accent);
+    display: flex;
+    align-items: center;
+}
+
+.warning-note {
+    background: rgba(255, 75, 75, 0.1);
+    padding: 1rem;
+    border-radius: 8px;
+    border-left: 3px solid #ff4b4b;
+    display: flex;
+    align-items: center;
+    margin-top: 1rem;
+}
+
+.warning-note i {
+    margin-right: 0.8rem;
+    font-size: 1.2rem;
+}
+
+.disclaimer-note i { color: var(--accent); }
+.warning-note i { color: #ff4b4b; }
+</style>
+
+
+
+
+
+
+
+<!-- FAQ Section -->
+<section id="faq" class="faq-section">
+    <div class="section-header">
+        <h2 class="section-title">Frequently Asked Questions</h2>
+        <p class="section-subtitle">Quick answers to common questions</p>
+    </div>
+
+    <div class="faq-grid">
+        <!-- FAQ Item 1 -->
+        <div class="faq-card">
+            <div class="faq-header">
+                <div class="faq-icon">
+                    <i class="fas fa-shield-alt"></i>
+                </div>
+                <h3 class="faq-question">Why Is Go6 Flagged As Potential Malware?</h3>
+            </div>
+            <div class="faq-answer">
+                <p>Nuitka compilation is frequently used by malware authors because it:</p>
+                <ul>
+                    <li>Protects source code from inspection</li>
+                    <li>Makes behavioral analysis difficult without specialized tools</li>
+                    <li>Commonly appears in crypto-related malicious software</li>
+                </ul>
+                
+                <p>Security systems flag Nuitka-compiled binaries as suspicious due to these patterns, 
+                especially when handling cryptocurrency functions.</p>
+    
+
+            </div>
+        </div>
+    
+        <!-- FAQ Item 2 -->
+        <div class="faq-card">
+            <div class="faq-header">
+                <div class="faq-icon">
+                    <i class="fas fa-key"></i>
+                </div>
+                <h3 class="faq-question">How to Obtain Tokens</h3>
+            </div>
+            <div class="faq-answer">
+                <p>How to get them</p>
+                <ol>
+                    <li>Join Uhia's Discord server using the official invite</li>
+                    <li>Navigate to #tokens channel</li>
+                    <li>Follow the purchase link provided in the channel</li>
+                </ol>
+                
+                <div class="proxy-note">
+                    <i class="fas fa-info-circle"></i>
+                    Uhia is Go6 recommended token supplier for his cheap prices and his amazing weekly discounts
+                </div>
+                
+                <a href="https://discord.gg/dvHU5BUyks" target="_blank" rel="noopener" class="discord-link">
+                    Click Here To Join His Server
+                </a>
+            </div>
+        </div>
+    
+
+
+        <!-- FAQ Item 2 -->
+        <div class="faq-card">
+            <div class="faq-header">
+                <div class="faq-icon">
+                    <i class="fas fa-server"></i>
+                </div>
+                <h3 class="faq-question">Where to get proxies?</h3>
+            </div>
+            <div class="faq-answer">
+                <p>Recommended proxy providers:</p>
+                <ul>
+                    <li>IPRoyal: <a href="https://iproyal.com/?r=gekkefries" target="_blank" rel="noopener">iproyal.com</a></li>
+                    <li>Vital Proxies: <a href="https://www.vital-proxies.com/" target="_blank" rel="noopener">vital-proxies.com</a></li>
+                </ul>
+                <div class="proxy-note">
+                    <i class="fas fa-exclamation-triangle"></i>
+                    Important: Ensure you select <strong>HTTP residential proxies</strong><br>
+                    Required format: <code>HOST:PORT:USER:PASS</code><br>
+                    Go6 does NOT support other formats
+                </div>
+            </div>
+        </div>
+        <!-- FAQ Item 2 -->
+        <div class="faq-card">
+            <div class="faq-header">
+                <div class="faq-icon">
+                    <i class="fas fa-heart"></i>
+                </div>
+                <h3 class="faq-question">Why is Go6 free?</h3>
+            </div>
+            <div class="faq-answer">
+                <p>I built Go6 for fun and want to build a community together with you all! ❤️<br><br>
+                This is a passion project - don't expect enterprise-grade quality - this is FREE! 
+                Join our Discord for support: <a href="https://discord.gg/go6" target="_blank" rel="noopener">discord.gg/go6</a></p>
+
+                <div class="disclaimer-note">
+                    <i class="fas fa-comment-slash"></i>
+                    Please don't complain in the Discord - but suggestions are welcome!
+                </div>
+
+                <div class="warning-note">
+                    <i class="fas fa-exclamation-triangle"></i>
+                    Disclaimer: I'm NOT responsible for any consequences of using this tool
+                </div>
+            </div>
+        </div>
+
+    <div class="faq-particles">
+        <div class="particle particle-1"></div>
+        <div class="particle particle-2"></div>
+        <div class="particle particle-3"></div>
+    </div>
+</section>
+
+<style>
+.faq-section {
+    padding: 8rem 5vw;
+    min-height: 100vh;
+    background: linear-gradient(45deg, var(--purple-1), var(--purple-3));
+    position: relative;
+    overflow: hidden;
+}
+
+.faq-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 2rem;
+    max-width: 1400px;
+    margin: 3rem auto 0;
+    position: relative;
+    z-index: 1;
+}
+
+.faq-card {
+    background: linear-gradient(45deg, var(--purple-4), var(--purple-3));
+    border-radius: 16px;
+    padding: 2rem;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    position: relative;
+    overflow: hidden;
+}
+
+.faq-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 200%;
+    height: 100%;
+    background: linear-gradient(
+        90deg,
+        transparent,
+        rgba(255, 107, 255, 0.1),
+        transparent
+    );
+    transition: 0.6s;
+}
+
+.faq-card:hover::before {
+    left: 100%;
+}
+
+.faq-header {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    margin-bottom: 1.5rem;
+}
+
+.faq-icon {
+    width: 50px;
+    height: 50px;
+    border-radius: 12px;
+    background: linear-gradient(45deg, var(--purple-4), var(--accent));
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.faq-icon i {
+    font-size: 1.5rem;
+}
+
+.faq-question {
+    flex: 1;
+    font-size: 1.2rem;
+    background: linear-gradient(45deg, #fff, var(--accent));
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+}
+
+.faq-answer {
+    color: rgba(255, 255, 255, 0.9);
+    line-height: 1.6;
+    padding-left: 3rem;
+    position: relative;
+}
+
+.faq-answer::before {
+    content: '';
+    position: absolute;
+    left: 1rem;
+    top: 0;
+    height: 100%;
+    width: 2px;
+    background: linear-gradient(transparent, var(--accent), transparent);
+}
+
+.faq-answer a {
+    color: var(--accent);
+    text-decoration: none;
+    position: relative;
+    font-weight: 600;
+    display: inline-block; 
+}
+
+.faq-answer a::after {
+    content: '';
+    position: absolute;
+    left: 0;
+    bottom: -2px;
+    width: 100%; 
+    height: 2px;
+    background: var(--accent);
+    transform: scaleX(0); 
+    transform-origin: left;
+    transition: transform 0.3s ease;
+}
+
+.faq-answer a:hover::after {
+    transform: scaleX(1); 
+}
+@media (max-width: 768px) {
+    .faq-section {
+        padding: 4rem 5vw;
+    }
+    
+    .faq-card {
+        padding: 1.5rem;
+    }
+    
+    .faq-answer {
+        padding-left: 1rem;
+    }
+    
+    .faq-answer::before {
+        left: 0.5rem;
+    }
+}
+</style>
+
+
+
+
+
+<!-- Support Section -->
+<section id="support" class="support-section">
+    <div class="section-header">
+        <h2 class="section-title">Need Help?</h2>
+        <p class="section-subtitle">We're always here to help you!</p>
+    </div>
+
+    <div class="support-grid">
+        <!-- Community Support -->
+        <div class="support-card">
+            <div class="support-icon">
+                <i class="fab fa-discord"></i>
+            </div>
+            <h3 class="support-title">Community Support</h3>
+            <p class="support-description">
+                Join our active Discord community for real-time help, updates, 
+                and to connect with other users
+            </p>
+            <a href="https://discord.gg/go6" class="support-link" target="_blank" rel="noopener">
+                Join Server
+                <i class="fas fa-arrow-right"></i>
+            </a>
+        </div>
+
+        <!-- Direct Support -->
+        <div class="support-card">
+            <div class="support-icon">
+                <i class="fas fa-comment-dots"></i>
+            </div>
+            <h3 class="support-title">Direct Contact</h3>
+            <p class="support-description">
+                For personal assistance or private questions, 
+                contact me directly on Discord
+            </p>
+            <a href="https://discordapp.com/users/1147540007171670077" class="support-link" target="_blank" rel="noopener">
+                Message Me
+                <i class="fas fa-arrow-right"></i>
+            </a>
+        </div>
+    </div>
+
+    <div class="support-particles">
+        <div class="particle particle-4"></div>
+        <div class="particle particle-5"></div>
+    </div>
+</section>
+
+<style>
+.support-section {
+    padding: 8rem 5vw;
+    min-height: 100vh;
+    background: linear-gradient(45deg, var(--purple-2), var(--purple-1));
+    position: relative;
+    overflow: hidden;
+}
+
+.support-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 3rem;
+    max-width: 1200px;
+    margin: 4rem auto 0;
+    position: relative;
+    z-index: 1;
+}
+
+.support-card {
+    background: var(--glass);
+    backdrop-filter: blur(10px);
+    border-radius: 20px;
+    padding: 2.5rem;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    position: relative;
+    overflow: hidden;
+}
+
+.support-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 200%;
+    height: 100%;
+    background: linear-gradient(
+        90deg,
+        transparent,
+        rgba(255, 107, 255, 0.1),
+        transparent
+    );
+    transition: 0.6s;
+}
+
+.support-card:hover::before {
+    left: 100%;
+}
+
+.support-icon {
+    width: 70px;
+    height: 70px;
+    border-radius: 16px;
+    background: linear-gradient(45deg, var(--purple-4), var(--accent));
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 1.5rem;
+}
+
+.support-icon i {
+    font-size: 2rem;
+    color: white;
+}
+
+.support-title {
+    font-size: 1.5rem;
+    margin-bottom: 1rem;
+    background: linear-gradient(45deg, #fff, var(--accent));
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+}
+
+.support-description {
+    color: rgba(255, 255, 255, 0.9);
+    margin-bottom: 2rem;
+    line-height: 1.6;
+}
+
+.support-link {
+    color: var(--accent);
+    text-decoration: none;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-weight: 600;
+    position: relative;
+}
+
+.support-link::after {
+    content: '';
+    position: absolute;
+    bottom: -2px;
+    left: 0;
+    width: 100%;
+    height: 2px;
+    background: var(--accent);
+    transform: scaleX(0);
+    transform-origin: right;
+    transition: transform 0.3s ease;
+}
+
+.support-link:hover::after {
+    transform: scaleX(1);
+    transform-origin: left;
+}
+
+.support-particles .particle {
+    background: linear-gradient(45deg, var(--accent), var(--purple-4));
+}
+
+.particle-4 {
+    width: 250px;
+    height: 250px;
+    top: 20%;
+    right: -10%;
+    opacity: 0.07;
+    animation-delay: -1s;
+}
+
+.particle-5 {
+    width: 180px;
+    height: 180px;
+    bottom: 15%;
+    left: -5%;
+    opacity: 0.05;
+    animation-delay: -3s;
+}
+
+@media (max-width: 768px) {
+    .support-section {
+        padding: 4rem 5vw;
+    }
+    
+    .support-grid {
+        gap: 2rem;
+    }
+    
+    .support-card {
+        padding: 1.5rem;
+    }
+}
+</style>
+
+
+
+
+
+
+
+
+    <script>
+        function handleResize() {
+            const heroSection = document.querySelector('.hero-section');
+            if (window.innerWidth <= 768) {
+                heroSection.style.minHeight = 'auto';
+            } else {
+                heroSection.style.minHeight = '100vh';
+            }
+        }
+
+        window.addEventListener('resize', handleResize);
+        handleResize(); 
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.style.opacity = 1;
+                    entry.target.style.transform = 'translateY(0)';
+                }
+            });
+        });
+
+        document.querySelectorAll('.cta-button').forEach(button => {
+            button.addEventListener('mouseover', () => {
+                button.style.transform = 'translateY(-3px)';
+            });
+            button.addEventListener('mouseout', () => {
+                button.style.transform = 'translateY(0)';
+            });
+        });
+    </script>
+</body>
+</html>
