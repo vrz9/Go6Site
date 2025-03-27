@@ -771,61 +771,6 @@
 
 
 
-<!-- Download Section -->
-<section id="download" class="download-section">
-    <div class="section-header">
-        <h2 class="section-title">Choose Your Version</h2>
-        <p class="section-subtitle">Select the interface that matches your preference</p>
-    </div>
-
-    <div class="download-grid">
-        <!-- UI Version -->
-        <div class="download-card">
-            <div class="version-image">
-                <img src="./files/imgs/ui.png" alt="UI Version">
-            </div>
-            <div class="version-content">
-                <div class="version-header">
-                    <i class="fas fa-desktop"></i>
-                    <h3 class="version-title">Graphical Interface [Beta]</h3>
-                </div>
-                <div class="version-specs">
-                    <p><i class="fas fa-check"></i> Intuitive visual controls</p>
-                    <p><i class="fas fa-check"></i> Real-time stats</p>
-                    <p><i class="fas fa-check"></i> Open Source</p>
-                    <p><i class="fas fa-check"></i> Easy To Use</p>
-                </div>
-                <a href="https://fedxg.pythonanywhere.com/download_ui" class="download-btn" target="_blank">
-                    <i class="fas fa-download"></i>
-                    Download UI Version
-                </a>
-            </div>
-        </div>
-
-        <!-- Console Version -->
-        <div class="download-card">
-            <div class="version-image">
-                <img src="./files/imgs/console.png" alt="Console Version">
-            </div>
-            <div class="version-content">
-                <div class="version-header">
-                    <i class="fas fa-terminal"></i>
-                    <h3 class="version-title">Console Edition</h3>
-                </div>
-                <div class="version-specs">
-                    <p><i class="fas fa-check"></i> Many Functions</p>
-                    <p><i class="fas fa-check"></i> Fast</p>
-                    <p><i class="fas fa-check"></i> Includes An Booster!</p>
-                </div>
-                <a href="https://fedxg.pythonanywhere.com/download_console" class="download-btn" target="_blank">
-                    <i class="fas fa-download"></i>
-                    Download Console Version
-                </a>
-            </div>
-        </div>
-    </div>
-</section>
-
 <style>
 .download-section {
     padding: 4rem 5vw;
@@ -838,10 +783,32 @@
     overflow: hidden;
 }
 
+.section-header {
+    text-align: center;
+    margin-bottom: 2rem;
+}
+
+.section-title {
+    font-size: clamp(2rem, 5vw, 3.5rem);
+    background: linear-gradient(45deg, #fff, var(--accent));
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+    margin-bottom: 1rem;
+}
+
+.section-subtitle {
+    font-size: clamp(1rem, 3vw, 1.2rem);
+    color: rgba(255, 255, 255, 0.8);
+    max-width: 600px;
+    margin: 0 auto;
+    padding: 0 1rem;
+}
+
 .download-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-    gap: 3rem;
+    grid-template-columns: repeat(auto-fit, minmax(min(300px, 100%), 1fr));
+    gap: 2rem;
     max-width: 1400px;
     margin: 2rem auto 0;
 }
@@ -884,7 +851,7 @@
 }
 
 .version-header i {
-    font-size: 2rem;
+    font-size: 1.5rem;
     color: var(--accent);
     background: linear-gradient(45deg, var(--purple-4), var(--accent));
     -webkit-background-clip: text;
@@ -893,7 +860,7 @@
 }
 
 .version-title {
-    font-size: 1.5rem;
+    font-size: clamp(1.2rem, 3vw, 1.5rem);
     background: linear-gradient(45deg, #fff, var(--accent));
     -webkit-background-clip: text;
     background-clip: text;
@@ -911,6 +878,7 @@
     gap: 0.5rem;
     margin-bottom: 0.8rem;
     color: rgba(255, 255, 255, 0.9);
+    font-size: clamp(0.9rem, 2vw, 1rem);
 }
 
 .version-specs i {
@@ -921,7 +889,7 @@
 .download-btn {
     background: linear-gradient(45deg, var(--purple-4), var(--accent));
     color: white;
-    padding: 1rem 2rem;
+    padding: 1rem;
     border-radius: 10px;
     text-align: center;
     text-decoration: none;
@@ -931,6 +899,7 @@
     gap: 0.8rem;
     transition: all 0.3s ease;
     margin-top: auto;
+    font-size: clamp(0.9rem, 2vw, 1rem);
 }
 
 .download-btn:hover {
@@ -939,8 +908,9 @@
 }
 
 @media (max-width: 768px) {
-    .download-card {
-        flex-direction: column;
+    .download-section {
+        padding: 3rem 5vw;
+        min-height: auto;
     }
     
     .version-image img {
@@ -952,13 +922,42 @@
     }
     
     .download-btn {
-        padding: 0.8rem 1.5rem;
+        padding: 0.8rem;
+    }
+}
+
+@media (max-width: 480px) {
+    .download-section {
+        padding: 2rem 5vw;
+    }
+    
+    .version-image img {
+        height: 180px;
+    }
+    
+    .version-header {
+        gap: 0.75rem;
+        margin-bottom: 1rem;
+    }
+    
+    .version-header i {
+        font-size: 1.25rem;
+    }
+    
+    .version-specs p {
+        font-size: 0.9rem;
+        margin-bottom: 0.6rem;
+    }
+    
+    .download-btn {
+        font-size: 0.9rem;
     }
 }
 
 @media (min-width: 1024px) {
     .download-grid {
-        grid-template-columns: repeat(2, 1fr));
+        grid-template-columns: repeat(2, 1fr);
+        gap: 3rem;
     }
     
     .download-card {
@@ -979,8 +978,63 @@
         flex: 1;
     }
 }
+</style>
+
+<section id="download" class="download-section">
+    <div class="section-header">
+        <h2 class="section-title">Choose Your Version</h2>
+        <p class="section-subtitle">Select the interface that matches your preference</p>
+    </div>
+
+    <div class="download-grid">
+        <div class="download-card">
+            <div class="version-image">
+                <img src="./files/imgs/ui.png" alt="UI Version">
+            </div>
+            <div class="version-content">
+                <div class="version-header">
+                    <i class="fas fa-desktop"></i>
+                    <h3 class="version-title">Graphical Interface [Beta]</h3>
+                </div>
+                <div class="version-specs">
+                    <p><i class="fas fa-check"></i> Intuitive visual controls</p>
+                    <p><i class="fas fa-check"></i> Real-time stats</p>
+                    <p><i class="fas fa-check"></i> Open Source</p>
+                    <p><i class="fas fa-check"></i> Easy To Use</p>
+                </div>
+                <a href="https://fedxg.pythonanywhere.com/download_ui" class="download-btn" target="_blank">
+                    <i class="fas fa-download"></i>
+                    Download UI Version
+                </a>
+            </div>
+        </div>
+
+        <div class="download-card">
+            <div class="version-image">
+                <img src="./files/imgs/console.png" alt="Console Version">
+            </div>
+            <div class="version-content">
+                <div class="version-header">
+                    <i class="fas fa-terminal"></i>
+                    <h3 class="version-title">Console Edition</h3>
+                </div>
+                <div class="version-specs">
+                    <p><i class="fas fa-check"></i> Many Functions</p>
+                    <p><i class="fas fa-check"></i> Fast</p>
+                    <p><i class="fas fa-check"></i> Includes An Booster!</p>
+                </div>
+                <a href="https://fedxg.pythonanywhere.com/download_console" class="download-btn" target="_blank">
+                    <i class="fas fa-download"></i>
+                    Download Console Version
+                </a>
+            </div>
+        </div>
+    </div>
+</section>
 
 
+    
+</style>
 .proxy-note {
     background: rgba(255, 107, 255, 0.1);
     padding: 1rem;
