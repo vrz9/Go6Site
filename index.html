@@ -512,8 +512,7 @@
 
 
 
-    <style>
-
+<style>
 .features-section {
     padding: 4rem 5vw;
     min-height: 100vh;
@@ -531,7 +530,7 @@
 }
 
 .section-title {
-    font-size: clamp(2.5rem, 5vw, 3.5rem);
+    font-size: clamp(2rem, 5vw, 3.5rem);
     background: linear-gradient(45deg, #fff, var(--accent));
     -webkit-background-clip: text;
     background-clip: text;
@@ -540,16 +539,17 @@
 }
 
 .section-subtitle {
-    font-size: 1.2rem;
+    font-size: clamp(1rem, 3vw, 1.2rem);
     color: rgba(255, 255, 255, 0.8);
     max-width: 600px;
     margin: 0 auto;
+    padding: 0 1rem;
 }
 
 .features-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-    gap: 2rem;
+    grid-template-columns: repeat(auto-fit, minmax(min(300px, 100%), 1fr));
+    gap: 1.5rem;
     max-width: 1400px;
     margin: 0 auto;
 }
@@ -558,7 +558,7 @@
     background: var(--glass);
     backdrop-filter: blur(10px);
     border-radius: 16px;
-    padding: 2rem;
+    padding: 1.5rem;
     border: 1px solid rgba(255, 255, 255, 0.1);
     transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
     position: relative;
@@ -592,20 +592,20 @@
 }
 
 .feature-icon {
-    width: 60px;
-    height: 60px;
+    width: 50px;
+    height: 50px;
     border-radius: 12px;
     background: linear-gradient(45deg, var(--purple-4), var(--accent));
     display: flex;
     align-items: center;
     justify-content: center;
-    margin-bottom: 1.5rem;
-    font-size: 1.5rem;
+    margin-bottom: 1rem;
+    font-size: 1.2rem;
 }
 
 .feature-title {
-    font-size: 1.4rem;
-    margin-bottom: 1rem;
+    font-size: clamp(1.2rem, 3vw, 1.4rem);
+    margin-bottom: 0.75rem;
     background: linear-gradient(45deg, #fff, var(--accent));
     -webkit-background-clip: text;
     background-clip: text;
@@ -615,26 +615,58 @@
 .feature-description {
     color: rgba(255, 255, 255, 0.8);
     line-height: 1.6;
+    font-size: clamp(0.9rem, 2vw, 1rem);
 }
 
 @media (max-width: 768px) {
     .features-section {
-        padding: 4rem 5vw;
+        padding: 3rem 5vw;
+        min-height: auto;
+    }
+    
+    .section-header {
+        margin-bottom: 2rem;
+    }
+    
+    .features-grid {
+        gap: 1rem;
     }
     
     .feature-card {
-        padding: 1.5rem;
+        padding: 1.25rem;
+    }
+}
+
+@media (max-width: 480px) {
+    .features-section {
+        padding: 2rem 5vw;
+    }
+    
+    .section-title {
+        font-size: 2rem;
+    }
+    
+    .section-subtitle {
+        font-size: 1rem;
+    }
+    
+    .feature-title {
+        font-size: 1.2rem;
+    }
+    
+    .feature-description {
+        font-size: 0.9rem;
+        line-height: 1.5;
     }
     
     .feature-icon {
-        width: 50px;
-        height: 50px;
-        font-size: 1.2rem;
+        width: 45px;
+        height: 45px;
+        font-size: 1rem;
     }
 }
-    </style>
+</style>
 
-<!-- Features Section -->
 <section id="features" class="features-section">
     <div class="section-header">
         <h2 class="section-title">Powerful Features</h2>
@@ -642,7 +674,6 @@
     </div>
 
     <div class="features-grid">
-        <!-- Feature Card 1 -->
         <div class="feature-card">
             <div class="feature-icon">
                 <i class="fas fa-bolt"></i>
@@ -653,7 +684,6 @@
             </p>
         </div>
 
-        <!-- Feature Card 2 -->
         <div class="feature-card">
             <div class="feature-icon">
                 <i class="fas fa-shield-alt"></i>
@@ -664,7 +694,6 @@
             </p>
         </div>
 
-        <!-- Feature Card 3 -->
         <div class="feature-card">
             <div class="feature-icon">
                 <i class="fas fa-code"></i>
@@ -675,7 +704,6 @@
             </p>
         </div>
 
-        <!-- Feature Card 4 -->
         <div class="feature-card">
             <div class="feature-icon">
                 <i class="fas fa-brain"></i>
@@ -686,65 +714,58 @@
             </p>
         </div>
 
-        <!-- Feature Card 5 -->
         <div class="feature-card">
             <div class="feature-icon">
-                    <i class="fas fa-money-bill-wave"></i>
+                <i class="fas fa-money-bill-wave"></i>
             </div>
             <h3 class="feature-title">Completely Free</h3>
             <p class="feature-description">
-                    No hidden costs, no subscriptions. 100% free to use!
+                No hidden costs, no subscriptions. 100% free to use!
             </p>
         </div>
 
-        <!-- Feature Card 6 -->
         <div class="feature-card">
             <div class="feature-icon">
-                    <i class="fas fa-shield-alt"></i>
+                <i class="fas fa-shield-alt"></i>
             </div>
             <h3 class="feature-title">Privacy First</h3>
             <p class="feature-description">
-                    We don’t collect or store any of your data. Your privacy is our priority!
+                We don’t collect or store any of your data. Your privacy is our priority!
             </p>
-    </div>
+        </div>
 
-        <!-- Feature Card 7 -->
         <div class="feature-card">
             <div class="feature-icon">
-                    <i class="fas fa-sync-alt"></i>
+                <i class="fas fa-sync-alt"></i>
             </div>
             <h3 class="feature-title">Always Up to Date</h3>
             <p class="feature-description">
-                    We provide regular updates and fixes whenever something breaks!
+                We provide regular updates and fixes whenever something breaks!
             </p>
-    </div>
+        </div>
 
-        <!-- Feature Card 8 -->
         <div class="feature-card">
             <div class="feature-icon">
-                    <i class="fas fa-desktop"></i>
+                <i class="fas fa-desktop"></i>
             </div>
             <h3 class="feature-title">Console or UI</h3>
             <p class="feature-description">
-                    Choose the experience that suits you best! Use our raider with a clean UI or go with the console.
+                Choose the experience that suits you best! Use our raider with a clean UI or go with the console.
             </p>
-    </div>
+        </div>
 
-        <!-- Feature Card 10 -->
         <div class="feature-card">
             <div class="feature-icon">
-                    <i class="fas fa-headset"></i>
+                <i class="fas fa-headset"></i>
             </div>
             <h3 class="feature-title">24/7 Support</h3>
             <p class="feature-description">
-                    Need help? Our team is always available on Discord!  
-                    <a href="https://discord.gg/go6" target="_blank" style="color: #5865F2; font-weight: bold; text-decoration: none;">
-                            Join us at discord.gg/go6
-                    </a>.
+                Need help? Our team is always available on Discord!  
+                <a href="https://discord.gg/go6" target="_blank" style="color: #5865F2; font-weight: bold; text-decoration: none; word-break: break-word;">
+                    Join us at discord.gg/go6
+                </a>
             </p>
-    </div>
-
-
+        </div>
     </div>
 </section>
 
